@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ClassTrack</title>
+    <link rel="icon" type="image/x-icon" href="/IMG/classtrack_logo.ico">
+    <link rel="stylesheet" href="/CSS/main.css">
+    <link rel="stylesheet" href="/CSS/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>ClassTrack</span>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#" onclick="showSection('overview')">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('courses')">
+                            <i class="fas fa-book"></i>
+                            <span>Courses</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('assignments')">
+                            <i class="fas fa-tasks"></i>
+                            <span>Assignments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('study-sessions')">
+                            <i class="fas fa-clock"></i>
+                            <span>Study Sessions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('grades')">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Grades</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" onclick="showSection('calendar')">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info" id="userInfo">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Loading...</span>
+                        <span class="user-role" id="userRole">Student</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-left">
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p id="pageSubtitle">Welcome back! Here's your academic overview.</p>
+                </div>
+                <div class="header-right">
+                    <div class="notifications">
+                        <button class="notification-btn" onclick="toggleNotifications()">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificationCount">0</span>
+                        </button>
+                        <div class="notification-dropdown" id="notificationDropdown">
+                            <div class="notification-header">
+                                <h3>Notifications</h3>
+                                <button onclick="markAllAsRead()">Mark all as read</button>
+                            </div>
+                            <div class="notification-list" id="notificationList">
+                                <!-- Notifications will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-menu">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <div class="user-menu-dropdown" id="userMenuDropdown">
+                            <a href="#" onclick="showProfile()">
+                                <i class="fas fa-user-cog"></i>
+                                Profile Settings
+                            </a>
+                            <a href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-body">
+                <!-- Overview Section -->
+                <section id="overview-section" class="content-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalCourses">0</h3>
+                                <p>Total Courses</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="pendingAssignments">0</h3>
+                                <p>Pending Assignments</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="studyHours">0</h3>
+                                <p>Study Hours This Week</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="averageGrade">0.0</h3>
+                                <p>Average Grade</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Upcoming Deadlines
+                                </h3>
+                                <a href="#" onclick="showSection('assignments')">View All</a>
+                            </div>
+                            <div class="card-content">
+                                <div id="upcomingDeadlines" class="deadline-list">
+                                    <!-- Upcoming deadlines will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>
+                                    <i class="fas fa-calendar-day"></i>
+                                    Today's Schedule
+                                </h3>
+                                <a href="#" onclick="showSection('calendar')">View Calendar</a>
+                            </div>
+                            <div class="card-content">
+                                <div id="todaySchedule" class="schedule-list">
+                                    <!-- Today's schedule will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>
+                                    <i class="fas fa-trophy"></i>
+                                    Recent Grades
+                                </h3>
+                                <a href="#" onclick="showSection('grades')">View All</a>
+                            </div>
+                            <div class="card-content">
+                                <div id="recentGrades" class="grades-list">
+                                    <!-- Recent grades will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-header">
+                                <h3>
+                                    <i class="fas fa-chart-pie"></i>
+                                    Progress Overview
+                                </h3>
+                            </div>
+                            <div class="card-content">
+                                <div id="progressChart" class="progress-chart">
+                                    <!-- Progress visualization will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Other sections will be dynamically loaded -->
+                <section id="courses-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Course Management</h2>
+                        <button class="btn btn-primary" onclick="openCourseModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Course
+                        </button>
+                    </div>
+                    <div id="coursesContainer" class="courses-grid">
+                        <!-- Courses will be loaded here -->
+                    </div>
+                </section>
+
+                <section id="assignments-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Assignment Tracker</h2>
+                        <button class="btn btn-primary" onclick="openAssignmentModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Assignment
+                        </button>
+                    </div>
+                    <div class="assignments-controls">
+                        <div class="filter-controls">
+                            <select id="courseFilter" onchange="filterAssignments()">
+                                <option value="">All Courses</option>
+                            </select>
+                            <select id="statusFilter" onchange="filterAssignments()">
+                                <option value="">All Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Overdue">Overdue</option>
+                            </select>
+                            <select id="priorityFilter" onchange="filterAssignments()">
+                                <option value="">All Priorities</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="assignmentsContainer" class="assignments-list">
+                        <!-- Assignments will be loaded here -->
+                    </div>
+                </section>
+
+                <section id="study-sessions-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Study Sessions</h2>
+                        <button class="btn btn-primary" onclick="openStudySessionModal()">
+                            <i class="fas fa-plus"></i>
+                            Schedule Session
+                        </button>
+                    </div>
+                    <div id="studySessionsContainer" class="study-sessions-grid">
+                        <!-- Study sessions will be loaded here -->
+                    </div>
+                </section>
+
+                <section id="grades-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Grade Management</h2>
+                        <button class="btn btn-primary" onclick="openGradeModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Grade
+                        </button>
+                    </div>
+                    <div id="gradesContainer" class="grades-container">
+                        <!-- Grades will be loaded here -->
+                    </div>
+                </section>
+
+                <section id="calendar-section" class="content-section">
+                    <div class="section-header">
+                        <h2>Academic Calendar</h2>
+                    </div>
+                    <div id="calendarContainer" class="calendar-container">
+                        <!-- Calendar will be loaded here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="courseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Course</h3>
+                <button class="close-btn" onclick="closeCourseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="courseForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="courseCode">Course Code</label>
+                        <input type="text" id="courseCode" name="courseCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="colorCode">Color</label>
+                        <input type="color" id="colorCode" name="colorCode" value="#007bff">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="courseTitle">Course Title</label>
+                    <input type="text" id="courseTitle" name="courseTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="instructor">Instructor</label>
+                    <input type="text" id="instructor" name="instructor">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="scheduleDay">Schedule Day</label>
+                        <select id="scheduleDay" name="scheduleDay">
+                            <option value="">Select Day</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="timeStart">Start Time</label>
+                        <input type="time" id="timeStart" name="timeStart">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeEnd">End Time</label>
+                        <input type="time" id="timeEnd" name="timeEnd">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeCourseModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="assignmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Assignment</h3>
+                <button class="close-btn" onclick="closeAssignmentModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="assignmentForm" class="modal-form">
+                <div class="form-group">
+                    <label for="assignmentTitle">Assignment Title</label>
+                    <input type="text" id="assignmentTitle" name="assignmentTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="assignmentCourse">Course</label>
+                    <select id="assignmentCourse" name="assignmentCourse" required>
+                        <option value="">Select Course</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="assignmentDescription">Description</label>
+                    <textarea id="assignmentDescription" name="assignmentDescription" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dueDate">Due Date</label>
+                        <input type="datetime-local" id="dueDate" name="dueDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="priority">Priority</label>
+                        <select id="priority" name="priority" required>
+                            <option value="Low">Low</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="High">High</option>
+                            <option value="Critical">Critical</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeAssignmentModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Assignment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="alertContainer" class="alert-container"></div>
+
+    <script src="js/dashboard.js"></script>
+    <script src="js/courses.js"></script>
+    <script src="js/assignments.js"></script>
+    <script src="js/study-sessions.js"></script>
+    <script src="js/grades.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notifications.js"></script>
+</body>
+</html>
